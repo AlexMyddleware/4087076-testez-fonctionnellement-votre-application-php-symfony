@@ -67,7 +67,7 @@ class DiaryControllerTest extends WebTestCase
                // thouroughly test the form
                $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-               echo $this->client->getResponse()->getContent();
+               // echo $this->client->getResponse()->getContent();
 
                $this->assertSelectorTextContains('div.alert.alert-success','Une nouvelle entrée dans votre journal a bien été ajoutée');
 
@@ -78,12 +78,22 @@ class DiaryControllerTest extends WebTestCase
      {
           // On se connecte
           $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('diary'));
+
+          // echo $crawler->html();
+          // save the content of crawler->html() in a file
+          file_put_contents('tests/Controller/list.html', $crawler->html());
+
           // On sélectionne le lien "Voir tous mes rapports"
-          $link = $crawler->selectLink('Voir tous mes rapports')->link();
+          $link = $crawler->selectLink('Voir tous les rapports')->link();
           // On clique sur le lien
           $crawler = $this->client->click($link);
+
+          $unfilteredHtml = $crawler->html();
+
+          // echo $unfilteredHtml;
           // On vérifie cherche le titre de la page
           $info = $crawler->filter('h1')->text();
+
           // On retire les retours à la ligne pour faciliter la vérification
           $info = $string = trim(preg_replace('/\s\s+/', ' ', $info));
           // On vérifie que le titre est bien celui attendu
