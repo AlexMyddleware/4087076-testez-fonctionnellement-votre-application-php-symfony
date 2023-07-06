@@ -19,6 +19,7 @@ class DiaryControllerTest extends WebTestCase
 
      {
         $this->client = static::createClient();
+        $this->client->followRedirects();
 
         $this->userRepository = $this->client->getContainer()->get('doctrine.orm.entity_manager')->getRepository(User::class);
         $this->user = $this->userRepository->findOneByEmail('richard11@dbmail.com');
@@ -41,5 +42,35 @@ class DiaryControllerTest extends WebTestCase
 
           $this->assertSame(1, $crawler->filter('h1')->count());
 
+     }
+
+     public function testRecordAction(){
+               
+               $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('add-new-record'));
+
+               // var_dump($this->client->getResponse()->getContent());
+     
+               $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+     
+               $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('add-new-record'));
+     
+               $this->assertSame(1, $crawler->filter('h1')->count());
+
+               $form = $crawler->selectButton('Enregistrer')->form();
+
+               $form['food[entitled]'] = 'Plat de pâtes';
+               $form['food[calories]'] = 600;
+
+               $this->client->submit($form);
+               // $this->client->followRedirect();
+
+               // thouroughly test the form
+               $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+               echo $this->client->getResponse()->getContent();
+
+               $this->assertSelectorTextContains('div.alert.alert-success','Une nouvelle entrée dans votre journal a bien été ajoutée');
+
+     
      }
 }
