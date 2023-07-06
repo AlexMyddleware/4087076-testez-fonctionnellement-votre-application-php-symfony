@@ -28,11 +28,15 @@ class DiaryControllerTest extends WebTestCase
         $this->client->loginUser($this->user);
    }
 
-    public function testHomepageIsUp()
+     public function testHomepageIsUp()
 
-   {
-        $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('homepage'));
+     {
+          $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('homepage'));
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
-   }
+          $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+          //    Crawler
+          $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('homepage'));
+          $this->assertSame(1, $crawler->filter('html:contains("Bienvenue sur FoodDiary!")')->count());
+     }
 }
