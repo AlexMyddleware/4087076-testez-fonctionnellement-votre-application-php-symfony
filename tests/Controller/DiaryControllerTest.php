@@ -81,7 +81,7 @@ class DiaryControllerTest extends WebTestCase
 
           // echo $crawler->html();
           // save the content of crawler->html() in a file
-          file_put_contents('tests/Controller/list.html', $crawler->html());
+          // file_put_contents('tests/Controller/list.html', $crawler->html());
 
           // On sélectionne le lien "Voir tous mes rapports"
           $link = $crawler->selectLink('Voir tous les rapports')->link();
