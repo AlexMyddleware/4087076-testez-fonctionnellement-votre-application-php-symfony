@@ -38,5 +38,8 @@ class DiaryControllerTest extends WebTestCase
           //    Crawler
           $crawler = $this->client->request(Request::METHOD_GET, $this->urlGenerator->generate('homepage'));
           $this->assertSame(1, $crawler->filter('html:contains("Bienvenue sur FoodDiary!")')->count());
+
+          $this->assertSame(1, $crawler->filter('h1')->count());
+
      }
 }
